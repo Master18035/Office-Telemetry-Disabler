@@ -1,8 +1,7 @@
 # Office Privacy and Telemetry Disabler
 
-<div align="center">
-  <img src="assets/preview.gif" alt="Office Privacy and Telemetry Disabler Logo" width="200">
-</div>
+![Preview](./assets/preview.gif)
+
 
 <div align="center">
 
