@@ -1,8 +1,5 @@
 # Office Privacy and Telemetry Disabler
 
-![Preview](./assets/preview.gif)
-
-
 <div align="center">
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
@@ -10,6 +7,7 @@
 ![Windows](https://img.shields.io/badge/Windows-10%2F11-blue.svg)
 ![Office](https://img.shields.io/badge/Office-2010--2024-orange.svg)
 
+<img src="./assets/preview.gif" alt="Preview" width="500" height="300">
 </div>
 
 A comprehensive PowerShell script to disable Microsoft Office logging, telemetry, and privacy features across all Office versions (2010-2024).
