@@ -93,7 +93,7 @@ A comprehensive PowerShell script to disable Microsoft Office logging, telemetry
 ## 🔧 Requirements
 
 - **Operating System**: Windows 7, 8, 10, or 11
-- **PowerShell**: Version 5.1 or higher (PowerShell 7 recommended for Windows 10/11)
+- **PowerShell**: Version 5.1 or higher
 - **Privileges**: Administrator rights required for registry and scheduled task modifications
 - **Office**: Any version from 2010 to 2024
 
