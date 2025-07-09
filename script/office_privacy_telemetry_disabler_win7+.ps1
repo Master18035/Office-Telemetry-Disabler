@@ -127,7 +127,7 @@ function Set-RegistryValueWithLogging {
 		try {
 			# Check if the registry key exists
 			if (-not (Test-Path $Path)) {
-				Write-Host "  -> Registry path not found: $Path" -ForegroundColor $Colors.NotFound
+				Write-Host "  [SKIP] Registry path not found: $Path" -ForegroundColor $Colors.NotFound
 				return
 			}
 			
@@ -174,7 +174,7 @@ function Disable-ScheduledTaskWithLogging {
 					Write-Host "    Description: $Description" -ForegroundColor $Colors.Info
 				}
 			} else {
-				Write-Host "  -> Task not found: $TaskName" -ForegroundColor $Colors.NotFound
+				Write-Host "  [SKIP] Task not found: $TaskName" -ForegroundColor $Colors.NotFound
 			}
 		} else {
 			# Windows 7 - використовуємо schtasks.exe
@@ -201,7 +201,7 @@ function Disable-ScheduledTaskWithLogging {
 					Write-Host "    Description: $Description" -ForegroundColor $Colors.Info
 				}
 			} else {
-				Write-Host "  -> Task not found: $TaskName" -ForegroundColor $Colors.NotFound
+				Write-Host "  [SKIP] Task not found: $TaskName" -ForegroundColor $Colors.NotFound
 			}
 		}
 	} catch {
@@ -212,7 +212,6 @@ function Disable-ScheduledTaskWithLogging {
 # Main script execution
 Write-Host "`n==========================================" -ForegroundColor $Colors.Title
 Write-Host "   Office Privacy and Telemetry Disabler" -ForegroundColor $Colors.Title
-Write-Host "               for Windows 7+" -ForegroundColor $Colors.Title
 Write-Host "                by EXLOUD" -ForegroundColor $Colors.Title
 Write-Host "     >> https://github.com/EXLOUD <<" -ForegroundColor $Colors.Title
 Write-Host "==========================================" -ForegroundColor $Colors.Title
@@ -312,7 +311,7 @@ if ($modernVersions.Count -gt 0) {
 		Set-RegistryValueWithLogging -Path "HKCU:\SOFTWARE\Microsoft\Office\$version\Common\Internet" -Name "UseOnlineContent" -Type "DWord" -Value 0 -Description "Disable online content"
 	}
 } else {
-	Write-Host "-> No modern Office versions found for Connected Experiences settings." -ForegroundColor $Colors.NotFound
+	Write-Host "[SKIP] No modern Office versions found for Connected Experiences settings." -ForegroundColor $Colors.NotFound
 }
 
 # ----------------------------------------------------------
@@ -381,7 +380,7 @@ if ($updateVersions.Count -gt 0) {
 		Set-RegistryValueWithLogging -Path "HKCU:\SOFTWARE\Microsoft\Office\$version\Common\PTWatson" -Name "PTWOptIn" -Type "DWord" -Value 0 -Description "Disable Watson error reporting"
 	}
 } else {
-	Write-Host "-> No modern Office versions found for update settings." -ForegroundColor $Colors.NotFound
+	Write-Host "[SKIP] No modern Office versions found for update settings." -ForegroundColor $Colors.NotFound
 }
 
 # ----------------------------------------------------------
@@ -397,14 +396,14 @@ foreach ($version in $installedVersions) {
 }
 
 Write-Host "`nScheduled tasks processed:" -ForegroundColor $Colors.Info
-Write-Host "  • Telemetry tasks: $($telemetryTasks.Count) processed" -ForegroundColor $Colors.Success
-Write-Host "  • Heartbeat tasks: $($heartbeatTasks.Count) processed" -ForegroundColor $Colors.Success
+Write-Host "  > Telemetry tasks: $($telemetryTasks.Count) processed" -ForegroundColor $Colors.Success
+Write-Host "  > Heartbeat tasks: $($heartbeatTasks.Count) processed" -ForegroundColor $Colors.Success
 
 Write-Host "`nLegend:" -ForegroundColor White
 Write-Host "[OK] " -NoNewline -ForegroundColor $Colors.Success; Write-Host "Action completed successfully"
 Write-Host "[OK] " -NoNewline -ForegroundColor $Colors.Changed; Write-Host "Setting changed"
-Write-Host "-> " -NoNewline -ForegroundColor $Colors.Info; Write-Host "Information or preparatory action"
-Write-Host "-> " -NoNewline -ForegroundColor $Colors.NotFound; Write-Host "Component not found, skipped"
+Write-Host "[INFO] " -NoNewline -ForegroundColor $Colors.Info; Write-Host "Information or preparatory action"
+Write-Host "[SKIP] " -NoNewline -ForegroundColor $Colors.NotFound; Write-Host "Component not found, skipped"
 Write-Host "[ERROR] " -NoNewline -ForegroundColor $Colors.Error; Write-Host "Error occurred"
 
 Write-Host "`nNote: Some changes may require restarting Office applications to take effect." -ForegroundColor $Colors.Warning
@@ -506,7 +505,7 @@ if ($blockHosts -eq 'y' -or $blockHosts -eq 'Y' -or $blockHosts -eq 'yes' -or $b
 				Write-Host "  [OK] Will block: $hostname" -ForegroundColor $Colors.Changed
 			} else {
 				$hostsSkipped++
-				Write-Host "  -> Already blocked: $hostname" -ForegroundColor $Colors.Success
+				Write-Host "  [INFO] Already blocked: $hostname" -ForegroundColor $Colors.Success
 			}
 		}
 		
