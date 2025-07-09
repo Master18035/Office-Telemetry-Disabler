@@ -212,7 +212,7 @@ function Disable-ScheduledTaskWithLogging {
 # Main script execution
 Write-Host "`n==========================================" -ForegroundColor $Colors.Title
 Write-Host "   Office Privacy and Telemetry Disabler" -ForegroundColor $Colors.Title
-Write-Host "            for Windows 7+" -ForegroundColor $Colors.Title
+Write-Host "               for Windows 7+" -ForegroundColor $Colors.Title
 Write-Host "                by EXLOUD" -ForegroundColor $Colors.Title
 Write-Host "     >> https://github.com/EXLOUD <<" -ForegroundColor $Colors.Title
 Write-Host "==========================================" -ForegroundColor $Colors.Title
