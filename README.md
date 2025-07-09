@@ -1,20 +1,25 @@
 # Office Privacy and Telemetry Disabler
 
 <div align="center">
+  <img src="assets/preview.gif" alt="Office Privacy and Telemetry Disabler Logo" width="300">
+</div>
+
+<div align="center">
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![PowerShell](https://img.shields.io/badge/PowerShell-5.1%2B-blue.svg)
-![Windows](https://img.shields.io/badge/Windows-10%2F11-blue.svg)
+![Windows](https://img.shields.io/badge/Windows-7%2F8%2F10%2F11-blue.svg)
 ![Office](https://img.shields.io/badge/Office-2010--2024-orange.svg)
 
-<img src="./assets/preview.gif" alt="Preview" width="500" height="300">
 </div>
 
-A comprehensive PowerShell script to disable Microsoft Office logging, telemetry, and privacy features across all Office versions (2010-2024).
+A comprehensive PowerShell script to disable Microsoft Office logging, telemetry, and privacy features across all Office versions (2010-2024) and Windows versions (7-11).
 
 ## 🚀 Features
 
 - **Multi-version support**: Works with Office 2010, 2013, 2016, 2019, 2021, and 2024
+- **Cross-Windows compatibility**: Supports Windows 7, 8, 10, and 11
+- **Automatic version detection**: Launcher automatically detects Windows version and runs appropriate script
 - **Comprehensive privacy protection**: Disables logging, telemetry, and data collection
 - **Scheduled task management**: Disables Office telemetry and update tasks
 - **Hosts file blocking**: Optional blocking of Microsoft telemetry servers
@@ -50,19 +55,25 @@ A comprehensive PowerShell script to disable Microsoft Office logging, telemetry
 ## 🛠️ Installation & Usage
 
 ### Method 1: Using the Launcher (Recommended)
-1. Download both `Launcher.bat` and `office_privacy_telemetry_disabler.ps1`
-2. Place both files in the same directory
+1. Download the launcher (`Launcher.bat`) and both PowerShell scripts:
+   - `office_privacy_telemetry_disabler.ps1` (for Windows 10/11)
+   - `office_privacy_telemetry_disabler_win7+.ps1` (for Windows 7/8/10/11)
+2. Place all files in the same directory
 3. Right-click on `Launcher.bat` and select "Run as administrator"
-4. Follow the on-screen prompts
+4. The launcher will automatically detect your Windows version and run the appropriate script
+5. Follow the on-screen prompts
 
 ### Method 2: Direct PowerShell Execution
-1. Download `office_privacy_telemetry_disabler.ps1`
+1. Download the appropriate PowerShell script for your Windows version:
+   - For Windows 10/11: `office_privacy_telemetry_disabler.ps1`
+   - For Windows 7/8/10/11: `office_privacy_telemetry_disabler_win7+.ps1`
 2. Open PowerShell as Administrator
 3. Run: `Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process`
-4. Execute: `.\office_privacy_telemetry_disabler.ps1`
+4. Execute the downloaded script: `.\office_privacy_telemetry_disabler.ps1` or `.\office_privacy_telemetry_disabler_win7+.ps1`
 
-## 🎯 Supported Office Versions
+## 🎯 Supported Versions
 
+### Office Versions
 | Version | Year | Status |
 |---------|------|--------|
 | 14.0 | Office 2010 | ✅ Supported |
@@ -71,18 +82,34 @@ A comprehensive PowerShell script to disable Microsoft Office logging, telemetry
 | 17.0 | Office 2021 | ✅ Supported |
 | 18.0 | Office 2024 | ✅ Supported |
 
+### Windows Versions
+| Version | Status | Script Used |
+|---------|--------|-------------|
+| Windows 7 | ✅ Supported | `office_privacy_telemetry_disabler_win7+.ps1` |
+| Windows 8/8.1 | ✅ Supported | `office_privacy_telemetry_disabler_win7+.ps1` |
+| Windows 10 | ✅ Supported | `office_privacy_telemetry_disabler.ps1` but you can run both |
+| Windows 11 | ✅ Supported | `office_privacy_telemetry_disabler.ps1` but you can run both |
+
 ## 🔧 Requirements
 
-- **Operating System**: Windows 10/11
-- **PowerShell**: Version 5.1 or higher (PowerShell 7 recommended)
+- **Operating System**: Windows 7, 8, 10, or 11
+- **PowerShell**: Version 5.1 or higher (PowerShell 7 recommended for Windows 10/11)
 - **Privileges**: Administrator rights required for registry and scheduled task modifications
 - **Office**: Any version from 2010 to 2024
+
+## 🤖 Automatic Version Detection
+
+The `Launcher.bat` includes intelligent Windows version detection:
+- Automatically identifies your Windows version
+- Selects the most compatible PowerShell script
+- Ensures optimal performance across all Windows versions
+- Provides fallback options for maximum compatibility
 
 ## 📸 Screenshots
 
 ### Main Interface
 The script provides a clean, colored interface showing:
-- Office version detection
+- Windows and Office version detection
 - Registry modifications
 - Scheduled task management
 - Progress indicators
@@ -102,6 +129,7 @@ The script provides a clean, colored interface showing:
 - **Registry validation**: Checks for existing registry paths before modification
 - **Reversible changes**: Most changes can be reversed manually if needed
 - **Non-destructive**: Only modifies privacy-related settings
+- **Version-specific optimization**: Different scripts optimized for different Windows versions
 
 ## 🚨 Important Notes
 
@@ -109,6 +137,7 @@ The script provides a clean, colored interface showing:
 2. **Office Restart**: Some changes require restarting Office applications
 3. **Windows Defender**: The script temporarily adds hosts file to exclusions
 4. **Backup**: Always backup your system before running system modification scripts
+5. **Version Compatibility**: Use the launcher for automatic version detection and optimal compatibility
 
 ## 🔄 What happens after running?
 
@@ -118,6 +147,7 @@ After successful execution:
 - Scheduled telemetry tasks are disabled
 - (Optional) Telemetry hosts are blocked
 - Office applications may need to be restarted
+- Changes are optimized for your specific Windows version
 
 ## 🤝 Contributing
 
@@ -128,6 +158,7 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 - Registry modifications use proper error handling
 - Scheduled task management includes comprehensive logging
 - Code is modular and well-documented
+- Version-specific optimizations for different Windows versions
 
 ## 📜 License
 
@@ -149,10 +180,12 @@ If you encounter any issues:
 1. Check the [Issues](../../issues) section
 2. Ensure you're running as Administrator
 3. Verify your Office version is supported
-4. Check the console output for specific error messages
+4. Check your Windows version compatibility
+5. Use the launcher for automatic version detection
+6. Check the console output for specific error messages
 
 ---
 
 **Made with ❤️ by [EXLOUD](https://github.com/EXLOUD)**
 
-*Protecting your privacy, one script at a time.*
+*Protecting your privacy across all Windows versions, one script at a time.*
