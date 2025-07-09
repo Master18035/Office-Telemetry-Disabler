@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 :: ====================================================
-:: Simplified PowerShell Script Launcher
+:: Office Privacy and Telemetry Disabler Launcher
 :: ====================================================
 
 title Office Privacy and Telemetry Disabler Launcher
@@ -19,33 +19,30 @@ set "PS5_PATH=C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe"
 set "PS_EXE="
 set "PS_SCRIPT="
 set "PS_VERSION="
+set "SCRIPT_TYPE="
 
 :: ====================================================
 :: Find PowerShell Executable
 :: ====================================================
 
-:: Check for PowerShell 7 first (preferred)
 if exist "%PS7_PATH%" (
     set "PS_EXE=%PS7_PATH%"
     set "PS_VERSION=PowerShell 7"
     goto :found_powershell
 )
 
-:: Check for PowerShell 7 Preview
 if exist "%PS7_PREVIEW_PATH%" (
     set "PS_EXE=%PS7_PREVIEW_PATH%"
     set "PS_VERSION=PowerShell 7 Preview"
     goto :found_powershell
 )
 
-:: Check for PowerShell 5
 if exist "%PS5_PATH%" (
     set "PS_EXE=%PS5_PATH%"
     set "PS_VERSION=PowerShell 5"
     goto :found_powershell
 )
 
-:: No PowerShell found
 echo [ERROR] No compatible PowerShell version found!
 echo.
 echo Please install either:
@@ -58,56 +55,46 @@ exit /b 1
 :found_powershell
 
 :: ====================================================
-:: Find PowerShell Script
+:: Detect Windows Version
 :: ====================================================
+for /f "tokens=4-5 delims=. " %%i in ('ver') do (
+    set "WIN_MAJOR=%%i"
+    set "WIN_MINOR=%%j"
+)
 
-:: Try to find the appropriate script file
+if !WIN_MAJOR! GEQ 10 (
+    set "SCRIPT_BASENAME=office_privacy_telemetry_disabler.ps1"
+    set "SCRIPT_TYPE=Windows 10/11"
+) else (
+    set "SCRIPT_BASENAME=office_privacy_telemetry_disabler_win7+.ps1"
+    set "SCRIPT_TYPE=Windows 7/8/8.1"
+)
+
+:: ====================================================
+:: Locate Script
+:: ====================================================
 set "SCRIPT_FOUND="
 
-:: Check for Windows 10/11 script first
-set "TEST_SCRIPT=%SCRIPT_DIR%office_privacy_telemetry_disabler.ps1"
-if exist "%TEST_SCRIPT%" (
-    set "PS_SCRIPT=%TEST_SCRIPT%"
+set "TEST_SCRIPT=%SCRIPT_DIR%!SCRIPT_BASENAME!"
+if exist "!TEST_SCRIPT!" (
+    set "PS_SCRIPT=!TEST_SCRIPT!"
     set "SCRIPT_FOUND=YES"
-    set "SCRIPT_TYPE=Windows 10/11"
     goto :script_found
 )
 
-:: Check in script subdirectory
-set "TEST_SCRIPT=%SCRIPT_DIR%script\office_privacy_telemetry_disabler.ps1"
-if exist "%TEST_SCRIPT%" (
-    set "PS_SCRIPT=%TEST_SCRIPT%"
+set "TEST_SCRIPT=%SCRIPT_DIR%script\!SCRIPT_BASENAME!"
+if exist "!TEST_SCRIPT!" (
+    set "PS_SCRIPT=!TEST_SCRIPT!"
     set "SCRIPT_FOUND=YES"
-    set "SCRIPT_TYPE=Windows 10/11 (from script folder)"
+    set "SCRIPT_TYPE=!SCRIPT_TYPE! (from script folder)"
     goto :script_found
 )
 
-:: Check for Windows 7+ script
-set "TEST_SCRIPT=%SCRIPT_DIR%office_privacy_telemetry_disabler_win7+.ps1"
-if exist "%TEST_SCRIPT%" (
-    set "PS_SCRIPT=%TEST_SCRIPT%"
-    set "SCRIPT_FOUND=YES"
-    set "SCRIPT_TYPE=Windows 7/8/8.1"
-    goto :script_found
-)
-
-:: Check in script subdirectory
-set "TEST_SCRIPT=%SCRIPT_DIR%script\office_privacy_telemetry_disabler_win7+.ps1"
-if exist "%TEST_SCRIPT%" (
-    set "PS_SCRIPT=%TEST_SCRIPT%"
-    set "SCRIPT_FOUND=YES"
-    set "SCRIPT_TYPE=Windows 7/8/8.1 (from script folder)"
-    goto :script_found
-)
-
-:: No script found
-echo [ERROR] No PowerShell script found!
+echo [ERROR] Expected script !SCRIPT_BASENAME! not found!
 echo.
-echo Please make sure one of these files exists:
-echo  - office_privacy_telemetry_disabler.ps1 (for Windows 10/11)
-echo  - office_privacy_telemetry_disabler_win7+.ps1 (for Windows 7/8/8.1)
-echo.
-echo Either in the same directory as this launcher or in a 'script' subdirectory.
+echo Please make sure this script exists:
+echo  - !SCRIPT_BASENAME!
+echo Either in the same folder as this launcher or in the 'script' subfolder.
 echo.
 pause
 exit /b 1
@@ -115,7 +102,7 @@ exit /b 1
 :script_found
 
 :: ====================================================
-:: Display Information and Confirmation
+:: Display Information
 :: ====================================================
 
 echo.
@@ -124,7 +111,6 @@ echo    Office Privacy and Telemetry Disabler Launcher
 echo.
 echo                      by EXLOUD
 echo              https://github.com/EXLOUD
-echo.
 echo ====================================================
 echo.
 echo System Information:
@@ -169,13 +155,10 @@ echo.
 echo [WARNING] Administrator rights may be required for some registry changes.
 echo.
 
-:: Change directory to script location
 cd /d "%SCRIPT_DIR%"
 
-:: Launch PowerShell script with execution policy bypass
-"%PS_EXE%" -ExecutionPolicy Bypass -NoProfile -File "%PS_SCRIPT%"
+"%PS_EXE%" -ExecutionPolicy Bypass -NoProfile -File "!PS_SCRIPT!"
 
-:: Check exit code
 if %errorLevel% == 0 (
     echo.
     echo [SUCCESS] Script completed successfully!
