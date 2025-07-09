@@ -7,7 +7,7 @@
 <div align="center">
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![PowerShell](https://img.shields.io/badge/PowerShell-5.1%2B-blue.svg)
+![PowerShell](https://img.shields.io/badge/PowerShell-5%2B-blue.svg)
 ![Windows](https://img.shields.io/badge/Windows-7%2F8%2F10%2F11-blue.svg)
 ![Office](https://img.shields.io/badge/Office-2010--2024-orange.svg)
 
