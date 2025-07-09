@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 :: ====================================================
-:: PowerShell Script Launcher for Office Privacy & Telemetry Disabler
+:: Simplified PowerShell Script Launcher
 :: ====================================================
 
 title Office Privacy and Telemetry Disabler Launcher
@@ -20,10 +20,13 @@ set "PS_EXE="
 set "PS_SCRIPT="
 set "PS_VERSION="
 
+:: ====================================================
+:: Find PowerShell Executable
+:: ====================================================
+
 :: Check for PowerShell 7 first (preferred)
 if exist "%PS7_PATH%" (
     set "PS_EXE=%PS7_PATH%"
-    set "PS_SCRIPT=%SCRIPT_DIR%script\office_privacy_telemetry_disabler.ps1"
     set "PS_VERSION=PowerShell 7"
     goto :found_powershell
 )
@@ -31,7 +34,6 @@ if exist "%PS7_PATH%" (
 :: Check for PowerShell 7 Preview
 if exist "%PS7_PREVIEW_PATH%" (
     set "PS_EXE=%PS7_PREVIEW_PATH%"
-    set "PS_SCRIPT=%SCRIPT_DIR%script\office_privacy_telemetry_disabler.ps1"
     set "PS_VERSION=PowerShell 7 Preview"
     goto :found_powershell
 )
@@ -39,7 +41,6 @@ if exist "%PS7_PREVIEW_PATH%" (
 :: Check for PowerShell 5
 if exist "%PS5_PATH%" (
     set "PS_EXE=%PS5_PATH%"
-    set "PS_SCRIPT=%SCRIPT_DIR%script\office_privacy_telemetry_disabler.ps1"
     set "PS_VERSION=PowerShell 5"
     goto :found_powershell
 )
@@ -55,15 +56,67 @@ pause
 exit /b 1
 
 :found_powershell
-:: Check if the PowerShell script exists
-if not exist "%PS_SCRIPT%" (
-    echo [ERROR] PowerShell script not found: %PS_SCRIPT%
-    echo.
-    echo Make sure office_privacy_telemetry_disabler.ps1 is in the 'script' subdirectory.
-    echo.
-    pause
-    exit /b 1
+
+:: ====================================================
+:: Find PowerShell Script
+:: ====================================================
+
+:: Try to find the appropriate script file
+set "SCRIPT_FOUND="
+
+:: Check for Windows 10/11 script first
+set "TEST_SCRIPT=%SCRIPT_DIR%office_privacy_telemetry_disabler.ps1"
+if exist "%TEST_SCRIPT%" (
+    set "PS_SCRIPT=%TEST_SCRIPT%"
+    set "SCRIPT_FOUND=YES"
+    set "SCRIPT_TYPE=Windows 10/11"
+    goto :script_found
 )
+
+:: Check in script subdirectory
+set "TEST_SCRIPT=%SCRIPT_DIR%script\office_privacy_telemetry_disabler.ps1"
+if exist "%TEST_SCRIPT%" (
+    set "PS_SCRIPT=%TEST_SCRIPT%"
+    set "SCRIPT_FOUND=YES"
+    set "SCRIPT_TYPE=Windows 10/11 (from script folder)"
+    goto :script_found
+)
+
+:: Check for Windows 7+ script
+set "TEST_SCRIPT=%SCRIPT_DIR%office_privacy_telemetry_disabler_win7+.ps1"
+if exist "%TEST_SCRIPT%" (
+    set "PS_SCRIPT=%TEST_SCRIPT%"
+    set "SCRIPT_FOUND=YES"
+    set "SCRIPT_TYPE=Windows 7/8/8.1"
+    goto :script_found
+)
+
+:: Check in script subdirectory
+set "TEST_SCRIPT=%SCRIPT_DIR%script\office_privacy_telemetry_disabler_win7+.ps1"
+if exist "%TEST_SCRIPT%" (
+    set "PS_SCRIPT=%TEST_SCRIPT%"
+    set "SCRIPT_FOUND=YES"
+    set "SCRIPT_TYPE=Windows 7/8/8.1 (from script folder)"
+    goto :script_found
+)
+
+:: No script found
+echo [ERROR] No PowerShell script found!
+echo.
+echo Please make sure one of these files exists:
+echo  - office_privacy_telemetry_disabler.ps1 (for Windows 10/11)
+echo  - office_privacy_telemetry_disabler_win7+.ps1 (for Windows 7/8/8.1)
+echo.
+echo Either in the same directory as this launcher or in a 'script' subdirectory.
+echo.
+pause
+exit /b 1
+
+:script_found
+
+:: ====================================================
+:: Display Information and Confirmation
+:: ====================================================
 
 echo.
 echo ====================================================
@@ -74,8 +127,10 @@ echo              https://github.com/EXLOUD
 echo.
 echo ====================================================
 echo.
-echo Using: %PS_VERSION%
-echo Script location: %PS_SCRIPT%
+echo System Information:
+echo  - PowerShell: %PS_VERSION%
+echo  - Script: !SCRIPT_TYPE!
+echo  - Location: !PS_SCRIPT!
 echo.
 echo This will disable telemetry and privacy features for:
 echo  - Microsoft Office 2010-2024
@@ -107,7 +162,9 @@ exit /b 0
 cls
 
 echo.
-echo [INFO] Launching Office Privacy Disabler on %PS_VERSION% ...
+echo [INFO] Launching Office Privacy Disabler...
+echo [INFO] PowerShell: %PS_VERSION%
+echo [INFO] Script: !SCRIPT_TYPE!
 echo.
 echo [WARNING] Administrator rights may be required for some registry changes.
 echo.
